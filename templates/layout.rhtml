@@ -5,10 +5,24 @@
     <link rel="stylesheet" type="text/css" href="/css/coderay.css">
     <link rel="alternate" type="application/atom+xml" title="<%= title %> - feed" href="/index.xml" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/> 
-    <title><%= title %></title>
+<title>
+<% if @path == 'index' %>
+    Code it terron
+<% elsif @path.split('/').compact.length == 4 %>
+    <%= title %> - Your Blog Name
+<% else %>
+    <%= @path.capitalize.gsub(/[-]/, ' ') %> - Your Blog Name
+<% end %>
+</title>
   </head>
   <body>
-  	<header><h1><a href="/"><%= @config[:title] %></a></h1></header>
+  	<header>
+  		<% if @path == 'index' %>
+  		<h1><a href="/"><%= @config[:title] %></a></h1>
+  		<% else %>
+  		<h2><a href="/">&laquo; <%= @config[:title] %></a></h2>
+  		<% end %>
+  	</header>
     <section>
       <%= yield %> 
     </section>
