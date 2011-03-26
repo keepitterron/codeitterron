@@ -1,110 +1,46 @@
-html { margin: 20px }
 body {
   margin: 0 auto;
   font-family: 'Baskerville', Georgia, Times, serif;
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 16px;
+  line-height: 24px;
   padding: 15px;
   width: 720px;
 
 }
-header, footer, section, article {
+header, footer, section, article { display: block; }
+
+a { color: #b83000; }
+h1 a { color: black; text-decoration: none; }
+a:hover { text-decoration: underline; }
+h1, h2, h3, h4 { display: block; margin: 0;padding:0; font-weight: 600;}
+ul, li { list-style-type: none; }
+code { font: 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono; }
+pre { padding: 5px; font-size: 14px; }
+blockquote { font-style: italic; }
+
+body > header
+{
 	display: block;
+	padding: 15px 0;
 }
-#content {
-}
-#by {
+body > header > h1 { font-size: 36px; }
+body > footer
+{
+	text-align: left;
 	font-style: italic;
-  margin-right: 5px;
-	font-size: 28px;
-}
-#caption {
-	position: absolute;
-	font-size: 24px;
-	margin: -135px 0 0 70px;
-}
-#path {
-	color: #b53131;
-}
-.date {
-  font-style: italic;
-  float: right;
-  line-height: 43px;
-  margin-right: 30px;
-}
-a {
-  color: #b83000;
-}
-h1 a {
-  color: black;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-body > header > h1 {
-	border-left: 30px solid black;
-	padding-left: 30px;
-  font-size: 201px;
-  margin: 100px 0 15px 0;
-  font-weight: normal;
-}
-.post header {
-	margin-bottom: 10px;
-}
-.post .body p:first-child {
-	margin-top: 0;
-}
-.post .body p:last-child {
-	margin-bottom: 0;
-}
-.post {
-	margin-bottom: 30px;
-}
-.post:last-child {
-  margin-bottom: 10px;
-}
-.post p {
-  margin: 10px 0;
-}
-.post .more {
-  margin-top: -10px;
-  margin-right: 30px;
-  font-style: italic;
-  text-align: right;
-}
-.more a {
-  text-decoration: none;
-}
-.more a:hover { text-decoration: underline }
-body > header {
-	display: block;
-	padding-top: 30px;
-	line-height: 180px;
-	margin-bottom: 20px;
-}
-h1, h2, h3, h4 {
-  display: inline;
-  margin: 0;
-  font-weight: 600;
-}
-ul, li {
-  list-style-type: none;
-}
-code {
-  font-family: 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono;
-}
-pre {
-  padding: 20px;
-}
-blockquote {
-  font-style: italic;
+	font-size: 18px;
+	color: #888;
 }
 
-body > footer {
-  text-align: left;
-  margin-left: 10px;
-	font-style: italic;
-  font-size: 18px;
-  color: #888;
-}
+h2.title { color: #b83000; padding: 15px 0; }
+section.content { padding-left: 25px; }
+section#archives { padding: 10px 0 0; border-top: 1px solid #333; }
+
+.date { font-style: italic; display: block; }
+article.post {font-size: 16px;}
+article.post h1 { font-size: 28px; }
+article.post h2 { font-size: 24px; }
+article.post h3 { font-size: 20px; }
+article.post header { padding-bottom: 20px; }
+article.post:first-child { padding-top: 20px; }
+article.post:last-child { padding-bottom: 20px; }

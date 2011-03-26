@@ -1,0 +1,293 @@
+title: un blog in 5 minuti con ruby, toto ed heroku
+date: 26/03/2011
+
+<h3>1. Installation</h3> 
+ 
+<p>And here comes a little &ldquo;catch&rdquo;. While Toto is incredibly easy to use and customize, it does need a couple of things to get it running. You need <a href="http://www.ruby-lang.org">Ruby</a> and RubyGems to install and run Toto, and you&rsquo;ll need Git to deploy it to Heroku. Ruby is the programming language of Toto, and Git is a distributed version control system used to record code changes and deploy the latest version to Heroku.</p> 
+ 
+<p>If you&rsquo;re on a Mac (OS X 10.5 and higher), you should already have Ruby installed. To install Git you can use <a href="http://code.google.com/p/git-osx-installer/">this installer</a>. Linux people probably already know the drill, but if you don&rsquo;t there&rsquo;s more info on <a href="http://www.ruby-lang.org/en/downloads/">Ruby&rsquo;s official site</a> and the <a href="http://git-scm.com/">Git site</a>.</p> 
+ 
+<p>Unfortunately, Windows is trickier. There is however a <a href="http://docs.heroku.com/windows">really good screencast</a> over at <a href="http://docs.heroku.com">Heroku docs</a> that goes through all the steps involved with installing Git, Ruby and Ruby gems on Windows. It also shows you how to use Heroku on Windows.</p> 
+ 
+<p>(NOTE:  You may also need to also install the <a href="http://wiki.github.com/oneclick/rubyinstaller/development-kit">Ruby development kit</a> on Windows to get Toto working &mdash; get it before you install the Toto gem)</p> 
+ 
+<p>To use Heroku to host your blog, <a href="http://heroku.com">go there</a> and get a new account for free if you haven&rsquo;t already got one. Additionally, you&rsquo;ll need to install the Heroku Ruby gem (gems are little Ruby tools). On OS X or Linux, open up a Terminal window (search for Terminal if you&rsquo;ve never used it before) and type the following to get it installed:</p> 
+ 
+<pre><code>sudo gem install heroku
+</code></pre> 
+ 
+<p>It may ask you for your password, so be sure to type that in when required. Once it&rsquo;s installed you can go ahead and get the Toto gem (the actual engine), together with a Ruby server to run it, if you don&rsquo;t already have one. I recommend the Thin server.</p> 
+ 
+<p>NOTE: If you&rsquo;re on Mac OS X, you&rsquo;ll need to also install XCode before you try and install both, the Thin server and Toto. XCode is free and is available on any OS X installation disk, in the extras folder. Once you&rsquo;ve got it installed you can install both gems with this command:</p> 
+ 
+<pre><code>sudo gem install toto thin
+</code></pre> 
+ 
+<p>After this, we&rsquo;re ready to get stared. The first thing we need to do is grab a copy of Dorothy. Dorothy is the generic template for Toto&mdash;it basically has the set of folders and layouts you need together with a configuration file. Clone a copy of Dorothy using the following command, changing &ldquo;myblog&rdquo; to whatever folder name you want to put your new blog into:</p> 
+ 
+<pre><code>git clone git://github.com/cloudhead/dorothy.git myblog
+</code></pre> 
+ 
+<p>Note: this creates your blog folder in the directory you&rsquo;re currently in (i.e. by default it will be the &ldquo;Home&rdquo; location on OS X). Now we need to set up Heroku for this newly created blog. We&rsquo;ll navigate to our new folder and do this using the following commands (again substitute &ldquo;myblog&rdquo; to your blog&rsquo;s name):</p> 
+ 
+<pre><code>cd myblog
+heroku create myblog
+</code></pre> 
+ 
+<p>And that&rsquo;s it. To deploy and view the new blog just type:</p> 
+ 
+<pre><code>git push heroku master
+heroku open
+</code></pre> 
+ 
+<p>You should now see a newly deployed Toto blog running on Heroku. If you have a custom domain, there is a free module in Heroku that will let you use it (more info over at <a href="http://docs.heroku.com/custom-domains">Heroku docs</a>) I also recommend using their section on <a href="http://docs.heroku.com/git">deployment with Git</a> to learn more about it if you&rsquo;re not familiar with Git&mdash;it&rsquo;s very simple once you learn the basics.</p> 
+ 
+<p>Now&hellip;it may seem like it&rsquo;s a lot of work just to get one blog running, but actually, once you do this first set up once, the next time you want to launch a blog you can do it with about 3 commands (clone Dorothy, initialize Heroku, deploy), which really does take about 10 seconds. This combination of a cloud hosting platform, Heroku, and a version control system, Git, really makes things incredibly simple and fast once you get the  hang of it.</p> 
+ 
+<h4>Migrating from WordPress?</h4> 
+ 
+<p>Scott Stout has a Ruby script over at <a href="https://github.com/skout23/toto-import-from-wordpress">Github</a> which will convert a WordPress XML export to slugified toto articles. I&rsquo;ve used a similar, though a much simpler, script to migrate <a href="http://www.usabilitypost.com">UsabilityPost</a> over to toto. You can even migrate existing comments over to <a href="http:///www.disqus.com">Disqus</a>&mdash;the comments engine I recommend for toto&mdash;by first installing Disqus on your WordPress blog and then using their import service to get the old comments into Disqus.</p> 
+ 
+<h3>2. Writing posts</h3> 
+ 
+<p>Posts are all stored in the /articles/ folder. To create a new post just save a text file in that folder with its name in the following format:</p> 
+ 
+<pre><code>yyyy-mm-dd-post-permalink.txt 
+</code></pre> 
+ 
+<p>So if you&rsquo;re publishing a post on 7th May 2010 called &ldquo;Blog Updates&rdquo;, you&rsquo;ll name the file like: 2010-05-07-blog-updates.txt</p> 
+ 
+<p>Right at the top of each post text file you can add additional post information. The bits of info that are absolutely required are the date and the title. The date is separated by slashes and should match the date in the file name. You can use a different title to the permalink, as long as you specify it in the post as a custom &ldquo;slug&rdquo;. So for the above example I&rsquo;d write the following at the very start of the post:</p> 
+ 
+<pre><code>title: "Blog Updates And News"
+date: 2010/05/07
+slug: blog-updates
+</code></pre> 
+ 
+<p>Then right below this, leave an empty line and start writing the post. Toto uses <a href="http://daringfireball.net/projects/markdown/">Markdown</a> for formatting. If you&rsquo;ve never used it before, check out the site, it&rsquo;s a very easy way to format your content without writing any HTML. If you <em>do</em> want to use HTML, no problem, you can do that too.</p> 
+ 
+<p>That&rsquo;s basically it, just write new posts and put them in the articles folder. I keep draft posts in a /articles/drafts/ folder. These posts don&rsquo;t show up on the blog until I move them to the the articles folder.</p> 
+ 
+<p>If you&rsquo;re using Heroku and are ready to publish, you&rsquo;ll need to add these files to Git and push them to Heroku. You&rsquo;ll use the following commands:</p> 
+ 
+<pre><code>git add .
+git commit -a -m "written some new articles"
+git push heroku master
+</code></pre> 
+ 
+<h3>3. Running Toto locally</h3> 
+ 
+<p>Ok, you&rsquo;ve written some posts but what do they look like in your template&mdash;indeed, what does the site look like? How do we test it locally? Remember, we grabbed the Thin server when getting Toto installed. This will come handy here. Just open the Terminal, navigate to your blog folder, and type:</p> 
+ 
+<pre><code>thin start
+</code></pre> 
+ 
+<p>This will launch the Thin Ruby server. To see the site running on your machine, open a browser and navigate to: &ldquo;http://localhost:3000&rdquo;</p> 
+ 
+<h3>4. Modifying the template</h3> 
+ 
+<p>The HTML template is located in the /templates/ folder, with CSS, JavaScript and other assets located in /public/. &ldquo;layout.rhtml&rdquo; is the core template, with everything else being rendered inside it. If you edit this file, you&rsquo;ll see a bit of code in the middle that reads:</p> 
+ 
+<pre><code>&lt;%= yield %&gt;
+</code></pre> 
+ 
+<p>This is where all the posts or the page content goes&mdash;i.e. it will replace &ldquo;yield&rdquo; when you load the page. All the other code around &ldquo;yield&rdquo; will show up on every page, so this is where you&rsquo;ll add your navigation, header, footer and so on.</p> 
+ 
+<p>Let&rsquo;s go ahead and make some updates to make this template more robust.</p> 
+ 
+<h4>SEO-friendly description</h4> 
+ 
+<p>A good practice is to have a different page description (this is the meta description bit between the head tags) for each page, especially article pages. This description will show up on search results pages and so is useful for making the most of that traffic source. To get custom description to show up for each post, use the following code:</p> 
+ 
+<pre><code>&lt;meta name="description" 
+content="&lt;%= @context[:description] || 'Default description' %&gt;" /&gt;
+</code></pre> 
+ 
+<p>&ldquo;Default description&rdquo; will be used unless a bit of meta info called &lsquo;description&rsquo; is provided in the post text file. When you want to use a custom description just add this to the top of the post file:</p> 
+ 
+<pre><code>title: "Some Interesting Post"
+date: 2010/05/07
+description: "Custom description goes here..."
+</code></pre> 
+ 
+<h4>SEO-friendly page titles</h4> 
+ 
+<p>Page titles (the bit between the &#60;title&#62; tags) are very important for a search friendly site, so we need to update that code a little bit to make the most of it. I use the following code:</p> 
+ 
+<pre><code>&lt;title&gt;
+&lt;% if @path == 'index' %&gt;
+    Your Blog Name
+&lt;% elsif @path.split('/').compact.length == 4 %&gt;
+    &lt;%= title %&gt; - Your Blog Name
+&lt;% else %&gt;
+    &lt;%= @path.capitalize.gsub(/[-]/, ' ') %&gt; - Your Blog Name
+&lt;% end %&gt;
+&lt;/title&gt;
+</code></pre> 
+ 
+<p>Basically, &ldquo;Your Blog Name&rdquo; on the 3rd line will show up as the title if you&rsquo;re on the home page. The 5th line will render the title of the blog post before the blog name when you&rsquo;re on a blog post page. Finally, the 7th line will will show the title as: &ldquo;About &ndash; Your Blog Name&rdquo; when you&rsquo;re on the About page&mdash;the <code>@path...</code> bit will be replaced with the title of the page you&rsquo;re on. So edit the three instances of &ldquo;Your Blog Name&rdquo; to whatever you wish. The code here isn&rsquo;t particularly clean, but it works well enough.</p> 
+ 
+<h4>Navigation</h4> 
+ 
+<p>Dorothy comes with a few pages by default. You&rsquo;ve got the index, the about page, the article page and a custom archive page. These templates are all located in the &ldquo;/templates/pages&rdquo; folder. If you want to add a page, just create a new template in this folder and call it whatever you like. So if you want a books page, create a &ldquo;books.rhtml&rdquo; file in the pages folder. You&rsquo;ll then be able to access this new page by going to &ldquo;yourwebsite.com/books&rdquo;</p> 
+ 
+<p>If you&rsquo;d like to highlight the current location on the navigation bar you can use a simple conditional statement using the <code>@path</code> variable. So for example, our navigation code may look something like this:</p> 
+ 
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/archive"&gt;Archive&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="/books"&gt;Books&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre> 
+ 
+<p>The <code>@path</code> variables gives us the current location we&rsquo;re at. So if we&rsquo;re at the books page, <code>@path</code> will be &ldquo;books&rdquo;. The home path is called &ldquo;index&rdquo;. We can use this to set up some simple conditional statements to add an &ldquo;active&rdquo; class to the list items, which we can then target with CSS to add custom highlighting. The code will look as follows:</p> 
+ 
+<pre><code>&lt;ul&gt;
+    &lt;li &lt;%= ' class="active"' if @path == 'index' %&gt;&gt;
+        &lt;a href="/"&gt;Home&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li &lt;%= ' class="active"' if @path == 'archive' %&gt;&gt;
+        &lt;a href="/archive"&gt;Archive&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li &lt;%= ' class="active"' if @path == 'books' %&gt;&gt;
+        &lt;a href="/books"&gt;Books&lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre> 
+ 
+<h4>Feedburner</h4> 
+ 
+<p>If you want to use <a href="http://feedburner.google.com">Feedburner</a> to serve RSS you&rsquo;ll want to make a couple of quick changes. First of all, Feedburner has a limit on how much information it can store in its cache, so we&rsquo;ll want to trim our RSS output a little so that it only shows a few posts at a time, and not all of your blog&rsquo;s articles. Edit the &ldquo;/templates/index.builder&rdquo; file (it may be called &ldquo;feed.builder&rdquo;, in which case you should rename it to &ldquo;index.builder&rdquo; as the name should match your index page) and look at the articles loop. The first line should read something like:</p> 
+ 
+<pre><code>articles.reverse.each do |article|
+</code></pre> 
+ 
+<p>We want to limit the output to only a few items&hellip;say 10. This way we won&rsquo;t fill up Feedburner&rsquo;s cache. I changed this line to read:</p> 
+ 
+<pre><code>articles.reverse[0..10].each do |article|
+</code></pre> 
+ 
+<p>Now, to use Feedburner you&rsquo;ll obviously want to place a subscribe link on your &ldquo;layout.rhtml&rdquo; file to point to your Feedburner subscribe URL. What you&rsquo;ll also want to do though is add a bit of meta at the top of the layout file to say that the RSS for this page is located at Feedburner. Edit &ldquo;layout.rhtml&rdquo; and add this line between the &#60;head&#62; tags:</p> 
+ 
+<pre><code>&lt;link rel="alternate" type="application/rss+xml" 
+title="myblog" href="http://feeds.feedburner.com/myblog" /&gt;
+</code></pre> 
+ 
+<p>Make sure to change the two instances of &ldquo;myblog&rdquo; above to whatever it is your blog is called and your Feedburner URL is. This will make sure that if someone uses a browser-based RSS reader, they&rsquo;ll be redirected to Feedburner for the feed.</p> 
+ 
+<h4>Scheduled posts</h4> 
+ 
+<p>Want to write a bunch of posts in one go and then schedule the days on which they&rsquo;ll be posted? This is possible by modifying just a couple of lines of code. First of all, to schedule a post, just set the posts&rsquo;s date to whatever date you want the post to go out at (remember to set it both in the file name and in the &ldquo;date:&rdquo; meta inside the actual post). Then, we&rsquo;ll want to edit the template files so it only shows posts that have their dates set to today or older. We&rsquo;ll need to edit the &ldquo;index.rhtml&rdquo; file and the &ldquo;index.builder&rdquo; file (which generates the RSS).</p> 
+ 
+<p>In the &ldquo;index.rhtml&rdquo; template, edit the opening line of the posts loop (the default one will start something like &ldquo;for article in articles&hellip;&rdquo;) to read as:</p> 
+ 
+<pre><code>&lt;% articles.select {|a| a[:date] &lt;= Date.today}[0...10].each do |article| %&gt;
+</code></pre> 
+ 
+<p>This will show the latest 10 articles on the index page, published today or earlier, but will not show any articles with a date set in the future. When that date arrives, they&rsquo;ll automatically show up.</p> 
+ 
+<p>We&rsquo;ll also want to edit the RSS builder to ensure the same thing happens with our RSS feed. Edit the &ldquo;index.builder&rdquo; file (it may be called &ldquo;feed.builder&rdquo;, in which case you should change it to &ldquo;index.builder&rdquo; as it needs to match the name of your index). If you&rsquo;ve read the Feedburner section above, you saw me limit the number of posts to 10. Here I&rsquo;ve got the same change incorporated, and I&rsquo;m adding the date selection as well:</p> 
+ 
+<pre><code>articles.select {|a| a[:date] &lt;= Date.today}.reverse[0...10].each do |article| %&gt;
+</code></pre> 
+ 
+<h4>Custom categories</h4> 
+ 
+<p>Want to add custom categories to your posts? No problem, you can do this with the meta tags you add at the top of each post. The default tags are of course the title, date and the optional slug (permalink), but you can really add anything you like here. These tags are then accessible from your template files, allowing you to do some interesting things.</p> 
+ 
+<p>For example, over at <a href="http://www.usabilitypost.com">UsabilityPost</a> I&rsquo;ve written a few book reviews. I don&rsquo;t want my book reviews to show up together with normal blog posts, so I&rsquo;ve given them a special category. The top of my book reviews' text files looks like this:</p> 
+ 
+<pre><code>title: "Rocket Surgery Made Easy"
+date: 2010/01/18
+category: book
+thumbnail: http://img.usabilitypost.com/books/rocketsurgery.png
+book_author: Steve Krug
+</code></pre> 
+ 
+<p>I&rsquo;ve got a couple more tags in there, but you get the idea. I&rsquo;m adding all the extra stuff I need about this type of post here, and I&rsquo;m using the &ldquo;category: book&rdquo; as the key to sorting these types of posts on the index pages.</p> 
+ 
+<p>So for example, I&rsquo;ve create a separate page to display the book reviews at. I&rsquo;ve called it &ldquo;books.rhtml&rdquo; and put the new template in the &ldquo;/templates/pages&rdquo; folder. To show only the books posts I use the following loop:</p> 
+ 
+<pre><code>&lt;% @articles.select {|a| a[:category] == 'book' }[0...10].each do |article| %&gt;
+    &lt;a href="&lt;%= article.path %&gt;"&gt;&lt;%= article.title %&gt;&lt;/a&gt;
+    &lt;img src="&lt;%= article.thumbnail %&gt;" /&gt;
+    by &lt;%= article.book_author %&gt;
+    etc ...
+&lt;% end %&gt;
+</code></pre> 
+ 
+<p>Basically, you open the loop by selecting just the book posts. You can then access their special tags by simply calling them out, like &ldquo;article.thumbnail&rdquo; or &ldquo;article.book_author&rdquo;. This gives you a lot of flexibility for setting up custom categories and types of posts on your blog.</p> 
+ 
+<h4>Disqus comments</h4> 
+ 
+<p>Because Toto doesn&rsquo;t use a database, the commenting engine has to be outsourced. Disqus is a popular choice for this right now. By default Toto comes with Disqus support. Disqus integration itself is no hassle at all, it&rsquo;s only a few lines of code pasted into your template files, so you may want to update the default code in Dorothy to the most recent code Disqus give you.</p> 
+ 
+<p>To get started with Disqus you&rsquo;ll need an account, so head over to <a href="http://disqus.com">their site</a> to get a free one. Once you set up an account, you&rsquo;ll be provided with some code to paste into the templates (ignore the WordPress plugins and so on, and choose custom website integration in their information section). One bit of code goes in the bottom of &ldquo;article.rhtml&rdquo; template file (where you want the comments to be shown), and the other bit on the bottom of &ldquo;layout.rhtml&rdquo;, which will get you the comment counters.</p> 
+ 
+<p>I have a comment counter shown next to my post headline on the index page and on the article page. To do this, just append &ldquo;#disquss_thread&rdquo; to the end of the link". So the code for the comment counter/link would look like this:</p> 
+ 
+<pre><code>&lt;a href="&lt;%= article.path %&gt;#disqus_thread"&gt;0 Comments&lt;/a&gt;
+</code></pre> 
+ 
+<p>When you load the page, for a moment you&rsquo;ll see everything as &ldquo;0 Comments&rdquo;. Once Disqus loads though, it will change all the counters to their proper values, and the link will point to the comments section of that particular post.</p> 
+ 
+<h4>Blog configuration</h4> 
+ 
+<p>All the settings for your blog are located in the &ldquo;config.ru&rdquo; file. There are some helpful comments there to tell you how to go about modifying the settings. The main configuration takes place in the format of:</p> 
+ 
+<pre><code>set [:setting], [value]
+</code></pre> 
+ 
+<p>So if you want to set the default blog author, you&rsquo;d add the following line:</p> 
+ 
+<pre><code>set :author, "Dmitry Fadeyev"
+</code></pre> 
+ 
+<p>Now, if you don&rsquo;t specify a blog author in the post meta, the default one will be used. The settings I&rsquo;ve got for this blog look like this:</p> 
+ 
+<pre><code>set :author, "Dmitry Fadeyev"
+set :date, lambda {|now| now.strftime("%d %b %Y") }
+set :summary, :max =&gt; 1000, :delim =&gt; /~\n/
+set :disqus, 'fadeyev'
+set :title, 'Dmitry Fadeyev'
+set :url, 'http://fadeyev.net'
+</code></pre> 
+ 
+<p>Note the &ldquo;:delim&rdquo; setting. This sets a delimiter for the post summary. To use this, I just type &ldquo;~&rdquo; at the end of a paragraph in a post, and add an extra line break afterwards. Everything before the delimiter becomes part of the post summary shown on the index page (called with &ldquo;article.summary&rdquo;). I&rsquo;ve also customized the date to look how I want it. Here&rsquo;s a <a href="http://snippets.dzone.com/posts/show/2255">list of the Ruby date symbols</a> you can use to format the date.</p> 
+ 
+<h4>www redirect</h4> 
+ 
+<p>Want to redirect the &ldquo;www&rdquo; address of your blog to a non-www version? For example, for this blog, &ldquo;www.fadeyev.net&rdquo; redirects to &ldquo;fadeyev.net&rdquo;. To do this I use the rack-rewrite gem. First of all, you need to install the gem:</p> 
+ 
+<pre><code>sudo gem install rack-rewrite
+</code></pre> 
+ 
+<p>If you use Heroku, you&rsquo;ll need to add the new gem to the &ldquo;.gems&rdquo; file in your blog&rsquo;s directory. The .gems file will then look something like:</p> 
+ 
+<pre><code>builder   --source=http://gemcutter.org
+rdiscount --source=http://gemcutter.org
+toto      --source=http://gemcutter.org
+rack-rewrite --source=http://gemcutter.org
+</code></pre> 
+ 
+<p>Finally, add the following code to your &ldquo;config.ru&rdquo; file, above the &ldquo;run toto&rdquo; line:</p> 
+ 
+<pre><code># Redirect www to non-www
+gem 'rack-rewrite', '~&gt; 0.2.1'
+require 'rack-rewrite'
+if ENV['RACK_ENV'] == 'production'
+    use Rack::Rewrite do
+        r301 %r{.*}, 'http://yoursite.com$&amp;', :if =&gt; Proc.new {|rack_env|
+        rack_env['SERVER_NAME'] != 'yoursite.com'
+    }
+    end
+end
+</code></pre> 
+ 
+<p>Change the two instances of &ldquo;yoursite.com&rdquo; above to your blog&rsquo;s domain. You can also do it the other way around, i.e. redirect non-www requests to www. To do this just add www to the two instances of &ldquo;yoursite.com&rdquo;, making it &ldquo;www.yoursite.com&rdquo;.</p> 
+ 
+<h3>Parting words</h3> 
+ 
+<p>So if you&rsquo;re not scared of the command line, I really urge you to give Toto a try. It has really simplified blog deployment and management for me. My posts are no longer tucked away in a database somewhere&mdash;they&rsquo;re all backed up in a folder on my drive. There&rsquo;s very little, if no, security risks, because Toto doesn&rsquo;t have an admin panel or a database. Everything also gets cached, which makes this little engine extremely fast and flexible. To add to all of this, it&rsquo;s very easy to modify the template files and you&rsquo;ve got the power of Ruby on your side.</p> 
+ 
+<p>Hope you find the guide useful. If you find any mistakes, have some suggestions or questions, do <a href="/contact">get in touch</a> or leave a comment below.</p> 

@@ -8,11 +8,15 @@
     <title><%= title %></title>
   </head>
   <body>
+  	<header><h1><a href="/"><%= @config[:title] %></a></h1></header>
     <section>
       <%= yield %> 
     </section>
     <footer>
-      powered by <a href="http://cloudhead.io/toto">toto</a>
+      <strong>❤ keepitterron</strong> on
+      <a href="http://it.linkedin.com/in/claudiosemeraro" title="LinkedIn Claudio Semeraro">linkedin</a> |
+      <a href="http://facebook.com/keepitterron" title="Facebook di Claudio Semeraro">facebook</a> |
+      <a href="http://twitter.com/keepitterron" title="Twits di Claudio Semeraro">twitter</a>
     </footer>
   </body>
 </html>
