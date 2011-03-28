@@ -1,5 +1,6 @@
 title: un blog in 5 minuti con ruby, toto ed heroku
 date: 26/03/2011
+tags: ruby, toto, heroku, git
 
 ###Setup iniziale
 
