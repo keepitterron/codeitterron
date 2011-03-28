@@ -44,3 +44,7 @@ article.post h3 { font-size: 20px; }
 article.post header { padding-bottom: 20px; }
 article.post:first-child { padding-top: 20px; }
 article.post:last-child { padding-bottom: 20px; }
+article.post p code { font-size: 12px; background: #efefef; }
+
+//disqus
+ul#dsq-footer {display: none !important;}
