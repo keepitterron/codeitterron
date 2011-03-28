@@ -1,0 +1,60 @@
+--- 
+title: Vanilla Forum su server Nginx
+date: 25/03/2011
+tags: vanilla, php, nginx
+
+Vanilla è un forum scritto in php che sta ottenendo sempre più consensi grazie alla sua eleganza e semplicità.  
+Installarlo è semplicissimo: basta scaricare lo zip da [Vanillaforums](http://vanillaforums.org/), scompattarlo nella webroot e accedervi via browser. Il software capirà che è la vostra prima visita e vi mostrerà il processo di installazione.
+
+Su server Nginx ho pensato bene di non caricare l'.htaccess visto che non serve a nulla (in realtà è stato un caso fortuito), e ho checkato la casella **Install Vanilla without a .htaccess file.** che riporta:
+> You are missing Vanilla's .htaccess file. Sometimes this file isn't copied if you are using ftp to upload your files because this file is hidden. Make sure you've copied the .htaccess file before continuing.
+
+Dopo aver impostato i dati di connessione al database **in maniera corretta** e i dati di login, sono stato rallegrato da questo messaggio d'errore:
+> You are missing Vanilla's .htaccess file. Sometimes this file isn't copied if you are using ftp to upload your files because this file is hidden. Make sure you've copied the .htaccess file before continuing.
+> The connection parameters you specified failed to open a connection to the database. The database reported the following error:
+    SQLSTATE[HY000] [2005] Unknown MySQL server host '~~Invalid~~' (1)
+> You must specify the name of the database in which you want to set up Vanilla. Banner Title is required.
+
+Dopo aver cercato invano di sistemare e controllare i dati di connessione al db ho pensato di dare ascolto alla prima parte del messaggio, scoprendo che se manca il file <code>.htaccess</code> Vanilla semplicemente smette di caricare gli altri dati ricevuti in POST.
+
+Il secondo problema, stavolta molto meno oscuro, era la *configurazione di nginx.conf* per il **rewriting degli url**.  
+Ho cercato sul forum di supporto e ho trovato uno snippet che non mi funzionava per la mancanza di un solo parametro in get.  
+Ecco la mia configurazione:
+    :::terminal
+    server {
+	listen   80;
+	server_name  sub.domain.com;
+
+	root        /path/to/garden;
+	index       index.php index.html;                                                                                       
+
+	location / {                                                                                                                                                                                                                                    
+      if (-f $request_filename) {                                                                                            
+         break;                                                                                                              
+      }
+      if (-d $request_filename) {                                                                                            
+         break;                                                                                                              
+      }                                                                                                                      
+      rewrite ^(.+)$ /index.php?p=$1 last;                                                                                      
+	}         
+
+	location ~ \.php($|/) {                                                                                                   
+      fastcgi_pass   127.0.0.1:9000;
+      fastcgi_index  index.php;
+      #fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+      include        /etc/nginx/fastcgi_params;
+
+      set $script     $uri;
+      set $path_info  "";
+
+      if ($uri ~ "^(.+\.php)(/.+)") {
+          set $script     $1;
+          set $path_info  $2;
+      }
+
+      fastcgi_param  SCRIPT_FILENAME    $document_root$script;
+      fastcgi_param  SCRIPT_NAME        $script;
+      fastcgi_param  PATH_INFO          $path_info;
+	}
+	}
+La differenza con gli snippet che ho trovato online è in <code>rewrite ^(.+)$ /index.php?p=$1 last;</code>

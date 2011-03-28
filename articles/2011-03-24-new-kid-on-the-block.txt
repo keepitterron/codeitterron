@@ -1,0 +1,5 @@
+title: new kid on the block
+date: 24/03/2011
+
+blog creato con [toto](https://github.com/cloudhead/toto) ed hostato gratis su [heroku](http://heroku.com)
+just for my personal amusement.
