@@ -2,7 +2,7 @@ require 'toto'
 
 require 'coderay'
 require 'rack/codehighlighter'
-use Rack::Codehighlighter, :coderay, :markdown => true, :element => "pre>code", :pattern => /\A:::(\w+)\s*(\n|&#x000A;)/i, :logging => true, :line_numbers => 'inline'
+use Rack::Codehighlighter, :coderay, :line_numbers => :table, :markdown => true, :element => "pre>code", :pattern => /\A:::(\w+)\s*(\n|&#x000A;)/i, :logging => true, :line_numbers => 'inline'
 
 # Rack config
 use Rack::Static, :urls => ['/css', '/js', '/images', '/favicon.ico'], :root => 'public'

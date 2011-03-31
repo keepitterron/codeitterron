@@ -1,0 +1,28 @@
+--- 
+title: "Toto: syntax highlighting con coderay"
+date: 31/03/2011
+
+Aggiungere l'highlight della sintassi con [Coderay](http://coderay.rubychan.de/) e [Rack::Codehighlighter](https://github.com/wbzyl/rack-codehighlighter) è una cosa semplicissima:
+    gem install rack-codehighlighter
+    gem install coderay
+Modificate <code>config.ru</code> includendo questa riga subito dopo <code>require 'toto'</code>:
+    require 'coderay'
+    require 'rack/codehighlighter'
+    use Rack::Codehighlighter, :coderay, :markdown => true, :element => "pre>code",
+    :pattern => /\A:::(\w+)\s*(\n|&#x000A;)/i, :logging => true
+Salvate il foglio di stile di coderay nella cartella pubblica:
+    coderay_stylesheet > public/css/coderay.css
+Ora potete abilitare l'evidenziazione della sintassi nei vostri articoli usando quattro spazi di indentazione e poi la stringa <code>':::{linguaggio}'</code> sostituendo <code>{linguaggio}</code> con ad esempio <code>ruby</code>:
+    
+    Ruby:
+        :::ruby
+        # indentato di 4 spazi!
+        def test
+          puts "test !" if super(nil)
+        end
+Otterrete:
+    :::ruby
+    # indentato di 4 spazi!
+    def test
+      puts "test !" if super(nil)
+    end

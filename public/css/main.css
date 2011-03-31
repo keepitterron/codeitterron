@@ -47,7 +47,7 @@ article.post h3 { font-size: 20px; }
 article.post header { padding-bottom: 20px; }
 article.post:first-child { padding-top: 20px; }
 article.post:last-child { padding-bottom: 20px; }
-article.post p code { font-size: 12px; background: #efefef; }
+article.post p code { font-size: 12px; background: #F6F3C5; }
 
 ul.archives { float: none; width: 720px; }
 ul.archives li { clear: both; height: 25px; line-height: 25px; }
