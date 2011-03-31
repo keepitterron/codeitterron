@@ -5,15 +5,16 @@ body {
   line-height: 24px;
   padding: 15px;
   width: 720px;
+  color: #231f20;
 
 }
 header, footer, section, article { display: block; }
 
-a { color: #8B9BA3; }
-h1 a, h2 a { color: black; text-decoration: none; }
-a:hover { text-decoration: underline; }
+a { color: #2782C5; text-decoration: none; }
+h1 a, h2 a { color: #231f20; text-decoration: none; }
+a:hover { text-decoration: underline; text-decoration: underline; }
 h1, h2, h3, h4 { display: block; margin: 0;padding:0; font-weight: 600;}
-ul, li { list-style-type: none; }
+ul, li { list-style-type: none; margin: 0; padding: 0; }
 code { font: 'Espresso Mono', 'Panic Sans', 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono; }
 pre { padding: 5px; font-size: 14px; }
 blockquote { font-style: italic; }
@@ -26,15 +27,16 @@ body > header
 body > header > h1, body > header > h2 { font-size: 36px; }
 body > footer
 {
+	padding-top: 15px;
 	text-align: left;
 	font-style: italic;
 	font-size: 18px;
 	color: #888;
 }
 
-h2.title { color: #8B9BA3; padding: 15px 0; }
+h2.title { color: #2782C5; padding: 15px 0; }
 section.content { padding-left: 25px; }
-section#archives { padding: 10px 0 0; border-top: 1px solid #333; }
+section#archives { padding: 10px 0 0; border-top: 1px solid #231f20; }
 
 .date { font-style: italic; display: block; }
 article.post {font-size: 16px;}
@@ -46,5 +48,7 @@ article.post:first-child { padding-top: 20px; }
 article.post:last-child { padding-bottom: 20px; }
 article.post p code { font-size: 12px; background: #efefef; }
 
-//disqus
-ul#dsq-footer {display: none !important;}
+ul.archives { float: none; width: 720px; }
+ul.archives li { clear: both; height: 25px; line-height: 25px; }
+ul.archives span { display: block; float: left; width: 130px; background: #F6F3C5; padding: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; text-align: center; height: 20px; line-height: 20px; }
+ul.archives h3 { float: right; width: 570px; }
