@@ -1,5 +1,5 @@
 --- 
-title: "Toto: syntax highlighting con coderay"
+title: "toto: syntax highlighting con coderay"
 date: 31/03/2011
 
 Aggiungere l'highlight della sintassi con [Coderay](http://coderay.rubychan.de/) e [Rack::Codehighlighter](https://github.com/wbzyl/rack-codehighlighter) è una cosa semplicissima:

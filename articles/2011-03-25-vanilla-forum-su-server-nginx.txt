@@ -1,5 +1,5 @@
 --- 
-title: Vanilla Forum su server Nginx
+title: vanilla forum su server nginx
 date: 25/03/2011
 tags: vanilla, php, nginx
 
