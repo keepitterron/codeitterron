@@ -59,8 +59,6 @@ module Toto
 
   class Site
   
-  	include Ferret
-  
     def initialize config
       @config = config
     end
@@ -245,7 +243,6 @@ module Toto
 
   class Article < Hash
     include Template
-    include Ferret
 
     def initialize obj, config = {}
       @obj, @config = obj, config
