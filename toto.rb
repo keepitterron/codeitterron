@@ -3,7 +3,6 @@ require 'date'
 require 'erb'
 require 'rack'
 require 'digest'
-require 'open-uri'
 
 if RUBY_PLATFORM =~ /win32/
   require 'maruku'
@@ -59,6 +58,9 @@ module Toto
   end
 
   class Site
+  
+  	include Ferret
+  
     def initialize config
       @config = config
     end
@@ -78,7 +80,7 @@ module Toto
       end}.merge archives
     end
 
-    def archives filter = ""
+    def archives filter = "", search = nil
       entries = ! self.articles.empty??
         self.articles.select do |a|
           filter !~ /^\d{4}/ || File.basename(a) =~ /^#{filter}/
@@ -86,7 +88,23 @@ module Toto
           Article.new article, @config
         end : []
 
-      return :archives => Archives.new(entries, @config)
+
+	  if search.nil?
+	    { :archives => Archives.new(entries, @config) }
+	  else
+	  	index = Index::Index.new(:path => 'f.idx', :default_field => 'content')
+	  	puts "inizio la ricerca per " + search
+	  	tagged = []
+		index.search_each(search) do |id, score|
+			puts "trovato"
+			tagged << entries.select do |a|
+				a[:slug] || a[:title].slugize == id
+			end
+	  	end	  
+	    { :archives => tagged } if tagged.size > 0 
+	  end
+
+      #return :archives => Archives.new(entries, @config)
     end
 
     def article route
@@ -105,6 +123,7 @@ module Toto
       end
 
       body, status = if Context.new.respond_to?(:"to_#{type}")
+      	puts route.first
         if route.first =~ /\d{4}/
           case route.size
             when 1..3
@@ -112,6 +131,12 @@ module Toto
             when 4
               context[article(route), :article]
             else http 400
+          end
+        elsif route.first == 's' && route.size == 2
+          if(data = archives('', route[1])).nil?
+          	http 404
+          else
+          	context[data, :search]
           end
         elsif respond_to?(path)
           context[send(path, type), path.to_sym]
@@ -220,6 +245,7 @@ module Toto
 
   class Article < Hash
     include Template
+    include Ferret
 
     def initialize obj, config = {}
       @obj, @config = obj, config
@@ -250,6 +276,15 @@ module Toto
 
     def slug
       self[:slug] || self[:title].slugize
+    end
+    
+    def do_index
+    	index = Index::Index.new(:path => './x.idx')
+    	index.flush
+    	puts "adding article " + self.slug
+    	puts "adding title " + self.title
+    	index.add_document(:file => self.slug, :content => self[:body], :title => self.title)
+    	#index.add_document(:id => self.slug, :title => self.title, :content => self[:body])
     end
 
     def summary length = nil
@@ -294,6 +329,7 @@ module Toto
       :disqus => false,                                     # disqus name
       :summary => {:max => 150, :delim => /~\n/},           # length of summary and delimiter
       :ext => 'txt',                                        # extension for articles
+      :indexer => 'ferret/',                                # ferret index path
       :cache => 28800,                                      # cache duration (seconds)
       :github => {:user => "", :repos => [], :ext => 'md'}, # Github username and list of repos
       :to_html => lambda {|path, page, ctx|                 # returns an html, from a path & context

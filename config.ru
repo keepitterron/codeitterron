@@ -1,4 +1,6 @@
 require 'toto'
+require 'ferret'
+require 'find'
 
 require 'coderay'
 require 'rack/codehighlighter'

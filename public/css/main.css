@@ -1,6 +1,6 @@
 body {
   margin: 0 auto;
-  font-family: 'Baskerville', Georgia, Times, serif;
+  font-family: "Minion Pro", 'Baskerville', Georgia, Times, serif;
   font-size: 16px;
   line-height: 24px;
   padding: 15px;
@@ -9,12 +9,12 @@ body {
 }
 header, footer, section, article { display: block; }
 
-a { color: #b83000; }
+a { color: #8B9BA3; }
 h1 a, h2 a { color: black; text-decoration: none; }
 a:hover { text-decoration: underline; }
 h1, h2, h3, h4 { display: block; margin: 0;padding:0; font-weight: 600;}
 ul, li { list-style-type: none; }
-code { font: 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono; }
+code { font: 'Espresso Mono', 'Panic Sans', 'Anonymous Pro', 'Bitstream Vera Sans', 'Monaco', Courier, mono; }
 pre { padding: 5px; font-size: 14px; }
 blockquote { font-style: italic; }
 
@@ -32,7 +32,7 @@ body > footer
 	color: #888;
 }
 
-h2.title { color: #b83000; padding: 15px 0; }
+h2.title { color: #8B9BA3; padding: 15px 0; }
 section.content { padding-left: 25px; }
 section#archives { padding: 10px 0 0; border-top: 1px solid #333; }
 
