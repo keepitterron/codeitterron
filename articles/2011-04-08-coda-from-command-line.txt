@@ -1,0 +1,26 @@
+--- 
+title: Coda from command line
+date: 08/04/2011
+
+Lavorando con ruby mi trovo spesso a smanettare con la command line molto più di quanto io non abbia mai fatto con **php**.  
+Sentivo l'esigenza di avere un comodo tool che mi permettesse di lanciare [Coda](http://panic.com/coda) dalla command line similmente a quello che fa <code>mate</code> per textmate
+
+**Coda** non ha un tool simile, purtroppo, e quindi ho deciso di testare i miei skills per crearmi da solo un piccolo script che facesse esattamente quello che mi serve.
+
+##Script eseguibili in ruby
+Similmente a script eseguibili in altri linguaggi, la chiave del tutto è usare la _shebang_ adatta, nel nostro caso:
+    #!/usr/bin/env ruby
+In seguito basta rendere eseguibile lo script con il comando
+    chmod +x nome_file.rb
+E per rendere disponibile ovunque il nostro script lo spostiamo nella cartella <code>/usr/local/bin</code>
+    mv nome_file.rb /usr/local/bin/nome_file
+Ora possiamo lanciarlo con il comando
+    nome_file
+
+##Coda from command line
+Dopo aver [scaricato il file da github](https://github.com/keepitterron/Coda-command-line), averlo reso eseguibile, ed averlo spostato in <code>/usr/local/bin</code>,
+possiamo aprire Coda passndogli gli elementi da aprire:
+    coda file.rb
+    coda file1.rb file2.rb
+    coda *.rb
+    coda nome_cartella/
