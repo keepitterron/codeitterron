@@ -1,0 +1,18 @@
+--- 
+title: Usare YAML per debuggare oggetti
+date: 17/04/2011
+
+E' possibile visualizzare attributi e valori di un Modello nel comodo formato YAML invece della classica visualizzazione da terminale decisamente ostica da consultare in caso di molti attributi:
+    :::terminal
+    post = Post.last
+    post
+    #<struct Struct::Post title="Ruby", category="ruby", body="Ruby is an object oriented language", author="claudio">
+Usando YAML con la comoda funzione <code>y</code> otterremo invece:
+    :::terminal
+    y post
+    --- !ruby/struct:Post 
+	title: Ruby
+	category: ruby
+	body: Ruby is an object oriented language
+	author: claudio
+Decisamente di più rapida consultazione!
