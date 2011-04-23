@@ -48,6 +48,7 @@ article.post header { padding-bottom: 20px; }
 article.post:first-child { padding-top: 20px; }
 article.post:last-child { padding-bottom: 20px; }
 article.post p code { font-size: 12px; background: #F6F3C5; }
+article.post pre { width: 718px; overflow-x: scroll; }
 
 a.archives { display:block; width: 720px; float: none; padding: 3px 0; border-bottom: 1px solid #231f20; text-align: right; }
 ul.archives { float: none; width: 720px; }

@@ -1,0 +1,16 @@
+--- 
+title: Convertire WMA in MP3 con Ruby e ffmpeg
+date: 23/04/2011
+
+Oggi avevo una cartella piena di file WMA da convertire in formato MP3 per far si che iTunes le leggesse correttamente.  
+Dopo aver passato un po' di tempo per cercare un convertitore gratuito decente per OSX ho deciso di fare da me con `ffmpeg` e `ruby`  
+Ffmpeg su Osx lo installate comodamente usando `brew`
+    :::terminal
+    brew install ffmpeg
+Ora che abbiamo tutto quello che ci serve, ci basta lanciare *_Interactive Ruby*: `ìrb` e usare il oneliner
+    :::terminal
+    ext = ".wma"
+    Dir.glob("*#{ext}").each {|f| m = f.gsub(ext, '.mp3'); `ffmpeg -i '#{f}' -ab 192k -ac 2 -ar 44100 '#{m}'` }
+Ok, quasi oneliner, quella prima riga di configurazione ci torna utile se vogliamo convertire in mp3 altri formati.  
+La riga che esegue tutto il lavoro non fa altro che cercare nella cartella in cui viene lanciato `ìrb` tutti i file con estensione `ext`, rinominarli in `.mp3` e passarli a ffmpeg che converte i files nel formato desiderato.  
+A lavoro utlimato troverete, nella cartella in esame, i file convertiti con lo stesso nome degli originali ma in formato `mp3`
