@@ -8,7 +8,7 @@ Ffmpeg su Osx lo installate comodamente usando `brew`
     :::terminal
     brew install ffmpeg
 Ora che abbiamo tutto quello che ci serve, ci basta lanciare *_Interactive Ruby*: `ìrb` e usare il oneliner
-    :::terminal
+    :::ruby
     ext = ".wma"
     Dir.glob("*#{ext}").each {|f| m = f.gsub(ext, '.mp3'); `ffmpeg -i '#{f}' -ab 192k -ac 2 -ar 44100 '#{m}'` }
 Ok, quasi oneliner, quella prima riga di configurazione ci torna utile se vogliamo convertire in mp3 altri formati.  
