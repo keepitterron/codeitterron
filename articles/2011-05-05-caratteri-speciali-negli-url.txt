@@ -1,0 +1,28 @@
+--- 
+title: Caratteri speciali negli URL
+date: 05/05/2011
+
+Lavorando alla [versione ruby di raptxt](http://github.com/keepitterron/raptxt.it), sto cercando il modo migliore di ottimizzare gli URL. Alcuni caratteri comunemente presenti nei titoli sono sicuramente da eliminare o encodare, ma tanti altri caratteri che attualmente elimino sono assolutamenti usabili così come sono.
+
+Innanzitutto un URL è composto dalle seguenti parti (non tutte le parti vengono utilizzate sempre)
+    <scheme>://<username>:<password>@<host>:<port>/<path>;<parameters>?<query>#<fragment>
+
+Sicuramente da evitare sono i caratteri riservati, usati comunemente nella costruzione di URL canonici:
+    ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" | "$" | ","
+Questi caratteri hanno un significato particolare e ben definito all'interno di un URL e usarli senza encodarli genera comportamenti che dovremmo conoscere alla perfezione ('/' separa le directory, '?' indica l'inizio di uno o più parametri, '&' li separa etc.)
+
+Il secondo set di caratteri da tenere in considerazione è quello dei caratteri non riservati:
+    "-" | "_" | "." | "!" | "~" | "*" | "'" | "(" | ")"
+Questi caratteri sono tranquillamente utilizzabili senza paura di comportamenti non previsti o problematiche varie, non c'è alcun bisogno di encodarli.
+
+Del terzo gruppo fanno parte i caratteri che non è saggio utilizzare:
+    "{" | "}" | "|" | "\" | "^" | "[" | "]" | "`"
+Questi caratteri possono essere usati principalmente come separatori, usarli potrebbe darvi dei risultati che non vi aspettavate. Non è scientifico che lo facciano, ma sono da usare con attenzione. Il consiglio è quello di encodarli sempre.
+
+L'ultimo set di caratteri è composto da [ASCII control characters](http://en.wikipedia.org/wiki/ASCII#ASCII_control_characters), spaziature e i seguenti delimitatori:
+    "<" | ">" | "#" | "%" | '"'
+Alcuni di questi caratteri potrebbero essere considerati facenti parte dei caratteri riservati (# e %) mentre altri ('<', '>', '"') solitamente sono utilizzati nel testo per delimitare un URL.
+
+Il processo di encoding di un carattere equivale a trasformare i caratteri encodabili nella forma % seguito da due numeri che rappresentano il valore esadecimale ASCII del carattere stesso. Sicuramente il più noto è lo spazio (%20).
+
+Maggiori informazioni [potete trovarle qui](http://www.blooberry.com/indexdot/html/topics/urlencoding.htm)
