@@ -3,6 +3,8 @@ require 'date'
 require 'erb'
 require 'rack'
 require 'digest'
+require 'json'
+require 'net/http'
 
 if RUBY_PLATFORM =~ /win32/
   require 'maruku'
@@ -90,19 +92,18 @@ module Toto
 	  if search.nil?
 	    { :archives => Archives.new(entries, @config) }
 	  else
-	  	index = Index::Index.new(:path => 'f.idx', :default_field => 'content')
-	  	puts "inizio la ricerca per " + search
+	  	json = Net::HTTP.get(URI.parse("http://tapirgo.com/api/1/search.json?token=4dc916e83f61b01c710001cd&query=#{search}"))
+	  	puts "http://www.tapirgo.com/api/1/search.json?token=4dc916e83f61b01c710001cd&query=#{search}"
+	  	data = JSON.parse json
 	  	tagged = []
-		index.search_each(search) do |id, score|
-			puts "trovato"
-			tagged << entries.select do |a|
-				a[:slug] || a[:title].slugize == id
-			end
-	  	end	  
-	    { :archives => tagged } if tagged.size > 0 
+	  	data.each do |a|
+	  		a["date"] = a["published_on"].gsub('-', '/')
+	  		puts a
+	  		article = Article.new a, @config
+	  		tagged << article
+	  	end
+	    return { :archives => tagged } if tagged.size > 0 
 	  end
-
-      #return :archives => Archives.new(entries, @config)
     end
 
     def article route
@@ -121,6 +122,7 @@ module Toto
       end
 
       body, status = if Context.new.respond_to?(:"to_#{type}")
+      	req = Rack::Request.new(env)
       	puts route.first
         if route.first =~ /\d{4}/
           case route.size
@@ -130,8 +132,8 @@ module Toto
               context[article(route), :article]
             else http 400
           end
-        elsif route.first == 's' && route.size == 2
-          if(data = archives('', route[1])).nil?
+        elsif route.first == 's' && req.params["q"]
+          if(data = archives('', req.params["q"])).nil?
           	http 404
           else
           	context[data, :search]
@@ -275,15 +277,6 @@ module Toto
       self[:slug] || self[:title].slugize
     end
     
-    def do_index
-    	index = Index::Index.new(:path => './x.idx')
-    	index.flush
-    	puts "adding article " + self.slug
-    	puts "adding title " + self.title
-    	index.add_document(:file => self.slug, :content => self[:body], :title => self.title)
-    	#index.add_document(:id => self.slug, :title => self.title, :content => self[:body])
-    end
-
     def summary length = nil
       config = @config[:summary]
       sum = if self[:body] =~ config[:delim]

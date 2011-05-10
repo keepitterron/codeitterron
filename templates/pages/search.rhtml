@@ -1,0 +1,12 @@
+<h2 class="title"></h2>
+
+<% if archives.length > 0 %>
+<ul class="archives">
+<% for article in archives %>
+<li>
+    <h3><a href="<%= article.path %>"><%= article.title %></a> &raquo;</h3>
+    <span class="date"><%= article.date %></span>
+</li>
+<% end %>
+</ul>
+<% end %>

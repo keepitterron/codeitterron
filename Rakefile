@@ -1,4 +1,4 @@
-require 'toto'
+require File.join(File.dirname(__FILE__), 'toto')
 
 @config = Toto::Config::Defaults
 
