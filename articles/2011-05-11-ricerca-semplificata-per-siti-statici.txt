@@ -1,0 +1,26 @@
+--- 
+title: Ricerca semplificata per siti statici
+date: 11/05/2011
+
+Questo blog, come avrete letto, sfrutta un blog engine *statico*, non c'è un vero e proprio Database.  
+Essendo anche il mio piccolo secchiello degli esperimenti, volevo provare ad affidarmi ad un servizio esterno come ho fatto per i commenti anche per la ricerca.  
+Fra i vari links che mi sono passati avanti in questi giorni, mi ha colpito particolarmente [Tapir](http://tapirgo.com).
+
+<a href="http://tapirgo.com/" class="container"><img src="http://jeffkreeftmeijer.com/images/tapirgo.png"></a>
+
+##Tapir, go!
+[Tapir](http://tapirgo.com) è un semplicissimo servizio creato da [80Beans](http://80beans.com) che vi permette di indicizzare le vostre pagine fornendogli un feed rss, e tramite API restituisce una stringa JSON cercando il termine fornito.
+Ecco cosa risponde se provo a cercare nel mio sito <code>kid</code>  
+Richiesta:
+    http://tapirgo.com/api/1/search.json?token=4dc916e83f61b01c710001cd&query=kid
+Risposta:
+    :::json
+    [{
+    "title":"new kid on the block",
+    "published_on":"2011-03-24T00:00:00Z",
+    "_score":53.543724,
+    "summary":"blabla"
+    "link":"http://127.0.0.1/2011/03/24/new-kid-on-the-block/"
+    "content":"blablabla"
+    }]
+E dopo dieci minuti passati a fare le presentazioni con <code>JSON</code> e <code>Net::HTTP</code> e aver capito come farli lavorare con Toto ecco la [pagina di visualizzazione delle ricerche](http://codeitterron.heroku.com/s?q=kid) perfettamente funzionante ed integrata.
