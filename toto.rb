@@ -1,30 +1,10 @@
-require 'yaml'
-require 'date'
-require 'erb'
-require 'rack'
-require 'digest'
-require 'json'
-require 'net/http'
-
-if RUBY_PLATFORM =~ /win32/
-  require 'maruku'
-  Markdown = Maruku
-else
-  require 'rdiscount'
+$:.unshift File.dirname(__FILE__)
+%w.yaml date erb rack digest json net/http rdiscount builder ext/ext..each do |m|
+	require m
 end
 
-require 'builder'
-
-$:.unshift File.dirname(__FILE__)
-
-require 'ext/ext'
-
 module Toto
-  Paths = {
-    :templates => "templates",
-    :pages => "templates/pages",
-    :articles => "articles"
-  }
+  Paths = {:templates => "templates", :pages => "templates/pages", :articles => "articles"}
 
   def self.env
     ENV['RACK_ENV'] || 'production'
@@ -33,7 +13,7 @@ module Toto
   def self.env= env
     ENV['RACK_ENV'] = env
   end
-
+  
   module Template
     def to_html page, config, &blk
       path = ([:layout, :repo].include?(page) ? Paths[:templates] : Paths[:pages])
@@ -80,30 +60,24 @@ module Toto
       end}.merge archives
     end
 
-    def archives filter = "", search = nil
+    def archives filter = ""
       entries = ! self.articles.empty??
         self.articles.select do |a|
           filter !~ /^\d{4}/ || File.basename(a) =~ /^#{filter}/
         end.reverse.map do |article|
           Article.new article, @config
         end : []
-
-
-	  if search.nil?
-	    { :archives => Archives.new(entries, @config) }
-	  else
-	  	json = Net::HTTP.get(URI.parse("http://tapirgo.com/api/1/search.json?token=4dc916e83f61b01c710001cd&query=#{search}"))
-	  	puts "http://www.tapirgo.com/api/1/search.json?token=4dc916e83f61b01c710001cd&query=#{search}"
-	  	data = JSON.parse json
-	  	tagged = []
-	  	data.each do |a|
-	  		a["date"] = a["published_on"].gsub('-', '/')
-	  		puts a
-	  		article = Article.new a, @config
-	  		tagged << article
-	  	end
-	    return { :archives => tagged } if tagged.size > 0 
-	  end
+			{ :archives => Archives.new(entries, @config) }
+    end
+    
+    def search query
+			json = Net::HTTP.get(URI.parse("http://tapirgo.com/api/1/search.json?token=4dc916e83f61b01c710001cd&query=#{query}"))
+			data, tagged = JSON.parse(json), []
+			data.each do |a|
+				a["date"] = a["published_on"].gsub('-', '/')
+				tagged << Article.new(a, @config)
+			end
+			{:archives => tagged}
     end
 
     def article route
@@ -115,15 +89,14 @@ module Toto
     end
 
     def go route, env = {}, type = :html
+    	req = Rack::Request.new(env)
       route << self./ if route.empty?
       type, path = type =~ /html|xml|json/ ? type.to_sym : :html, route.join('/')
       context = lambda do |data, page|
         Context.new(data, @config, path, env).render(page, type)
       end
 
-      body, status = if Context.new.respond_to?(:"to_#{type}")
-      	req = Rack::Request.new(env)
-      	puts route.first
+      body, status = if Context.new.respond_to?(:"to_#{type}")      	
         if route.first =~ /\d{4}/
           case route.size
             when 1..3
@@ -132,8 +105,8 @@ module Toto
               context[article(route), :article]
             else http 400
           end
-        elsif route.first == 's' && req.params["q"]
-          if(data = archives('', req.params["q"])).nil?
+        elsif route.first == 's'
+          if(data = search( req.params["q"] )).nil?
           	http 404
           else
           	context[data, :search]
@@ -206,25 +179,7 @@ module Toto
     end
   end
 
-  class Repo < Hash
-    include Template
-
-    README = "https://github.com/%s/%s/raw/master/README.%s"
-
-    def initialize name, config
-      self[:name], @config = name, config
-    end
-
-    def readme
-      markdown open(README %
-        [@config[:github][:user], self[:name], @config[:github][:ext]]).read
-    rescue Timeout::Error, OpenURI::HTTPError => e
-      "This page isn't available."
-    end
-    alias :content readme
-  end
-
-  class Archives < Array
+	class Archives < Array
     include Template
 
     def initialize articles, config
@@ -304,11 +259,11 @@ module Toto
     def date()    @config[:date].call(self[:date])           end
     def author()  self[:author] || @config[:author]          end
     def to_html() self.load; super(:article, @config)        end
-    alias :to_s to_html
+    alias :to_s   to_html
   end
 
   class Config < Hash
-    Defaults = {
+    Defaults ={
       :author => ENV['USER'],                               # blog author
       :title => Dir.pwd.split('/').last,                    # site title
       :root => "index",                                     # site index
@@ -321,12 +276,11 @@ module Toto
       :ext => 'txt',                                        # extension for articles
       :indexer => 'ferret/',                                # ferret index path
       :cache => 28800,                                      # cache duration (seconds)
-      :github => {:user => "", :repos => [], :ext => 'md'}, # Github username and list of repos
       :to_html => lambda {|path, page, ctx|                 # returns an html, from a path & context
         ERB.new(File.read("#{path}/#{page}.rhtml")).result(ctx)
       },
       :error => lambda {|code|                              # The HTML for your error page
-        "<font style='font-size:300%'>toto, we're not in Kansas anymore (#{code})</font>"
+        "<h1>d'oh. it's broken! (#{code})</h1>"
       }
     }
     def initialize obj
