@@ -67,13 +67,14 @@ body > footer
 	padding-top: 15px;
 	text-align: left;
 	font-style: italic;
-	font-size: 18px;
+	font-size: 12px;
+	font-family: arial;
 	color: #888;
 }
 
 h2.title { color: #2782C5; padding: 15px 0; }
 section.content { padding-left: 25px; }
-section#archives { padding: 10px 0 0; border-top: 1px solid #231f20; }
+section#archives { padding: 10px 0 0; border-top: 1px solid #666; }
 
 .date { font-style: italic; display: block; }
 article.post {font-size: 16px;}
@@ -86,10 +87,10 @@ article.post:last-child { padding-bottom: 20px; }
 article.post p code { font-size: 12px; background: #F6F3C5; }
 article.post pre { width: 718px; overflow-x: scroll; }
 
-a.archives { display:block; width: 720px; float: none; padding: 3px 0; border-bottom: 1px solid #231f20; text-align: right; }
+a.archives { display:block; width: 720px; float: none; padding: 3px 0; border-bottom: 1px solid #666; text-align: right; }
 ul.archives { float: none; width: 720px; }
 ul.archives li { clear: both; height: 25px; line-height: 25px; }
-ul.archives span { display: block; float: left; width: 130px; background: #F6F3C5; padding: 2px; -webkit-border-radius: 2px; -moz-border-radius: 2px; text-align: center; height: 20px; line-height: 20px; }
+ul.archives span { display: block; float: left; width: 130px; background: #F6F3C5; padding: 2px 0; -webkit-border-radius: 2px; -moz-border-radius: 2px; text-align: left; text-indent: 8px; height: 20px; line-height: 20px; }
 ul.archives h3 { float: right; width: 570px; }
 
 a.container { display: block; text-align: center; }
