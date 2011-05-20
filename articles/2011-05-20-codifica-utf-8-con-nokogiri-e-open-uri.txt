@@ -1,0 +1,22 @@
+--- 
+title: Codifica utf-8 con Nokogiri e open-uri
+date: 20/05/2011
+
+**TL;DR**  
+**Il parser html di Nokogiri e open-uri danno problemi con l'encoding. Passare direttamente l'html.**
+
+Stavo creando un parser che scaricasse tutti i post di un blog ospitato su *myblog di virgilio* (una rara merda) con [Nokogiri](http://nokogiri.org) per trasferirlo su piattaforma *Wordpress*.  
+Con un paio di hack strutturali all'html sono riuscito a tirare giù tutte le informazioni di cui avevo bisogno, ma sembrava non ci fosse modo di fargli capire la codifica.  
+Molto stranamente, visto che il blog era già in utf-8 e a quanto pare Nokogiri usa utf-8 di default.  
+Quando ormai stavo per mollare il colpo ho trovato la soluzione per puro caso. Ecco com'era il mio codice:  
+    :::ruby
+    doc = Nokogiri::HTML(open('http://***.myblog.it/'))
+    #resto del codice
+
+Mi è bastato trasformare questa riga in:
+    :::ruby
+    html = open('http://***.myblog.it/')
+    doc = Nokogiri::HTML(html.read)
+    #resto del codice
+E magicamente tutto ha funzionato come dovuto.
+A quanto pare si tratta di un **problema dovuto alla combo Nokogiri e open-uri** e per ovviare il problema basta passare direttamente la stringa contente l'html.

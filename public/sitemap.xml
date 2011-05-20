@@ -12,6 +12,16 @@
   <priority>1.00</priority>
 </url>
 <url>
+  <loc>http://codeitterron.heroku.com/2011/05/20/codifica-utf-8-con-nokogiri-e-open-uri/</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>http://codeitterron.heroku.com/2011/05/11/ricerca-semplificata-per-siti-statici/</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.80</priority>
+</url>
+<url>
   <loc>http://codeitterron.heroku.com/2011/05/05/caratteri-speciali-negli-url/</loc>
   <changefreq>monthly</changefreq>
   <priority>0.80</priority>
